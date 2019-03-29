@@ -9,7 +9,8 @@ create table if not exists persistent_logins (
 delete from  user_role;
 delete from  roles;
 delete from  users;
-
+delete from  role_permission;
+delete from  permissions;
 
 INSERT INTO roles (id, name) VALUES 
 (1, 'ROLE_ADMIN'),
@@ -28,3 +29,22 @@ insert into user_role(user_id, role_id) values
 (1,3),
 (3,2)
 ;
+
+INSERT INTO permissions (id, code, url) VALUES 
+(1, 'save_message', '/messages'),
+(2, 'list_message', '/messages/list')
+;
+
+insert into role_permission(role_id, permission_id) values
+(1, 1),(1, 2),
+(3, 2);
+
+
+SELECT u.id, u.name, r.name, p.code, p.url FROM test.users u 
+left join test.user_role ur on u.id = ur.user_id
+left join test.roles r on ur.role_id=r.id
+left join test.role_permission rp on r.id=rp.role_id
+left join test.permissions p on rp.permission_id=p.id
+;
+
+

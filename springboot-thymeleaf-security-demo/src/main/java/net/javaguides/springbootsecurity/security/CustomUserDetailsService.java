@@ -1,5 +1,6 @@
 package net.javaguides.springbootsecurity.security;
 
+import java.util.Arrays;
 import java.util.Collection;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,8 +35,18 @@ public class CustomUserDetailsService implements UserDetailsService {
 	}
 
 	private static Collection<? extends GrantedAuthority> getAuthorities(User user) {
-		String[] userRoles = user.getRoles().stream().map((role) -> role.getName()).toArray(String[]::new);
+		String[] codes = user.getRoles()
+			.stream()
+			.flatMap(role -> role.getPermissions().stream())
+			.map(p -> p.getCode())
+			.toArray(String[]::new);
+		System.err.println("user: "+user.getName()+"  , codes: "+ Arrays.toString(codes));
+		return  AuthorityUtils.createAuthorityList(codes);
+		
+		/*
+		String[] userRoles = user.getRoles().stream().map((role) -> role.getPermissions()).toArray(String[]::new);
 		Collection<GrantedAuthority> authorities = AuthorityUtils.createAuthorityList(userRoles);
 		return authorities;
+		*/
 	}
 }

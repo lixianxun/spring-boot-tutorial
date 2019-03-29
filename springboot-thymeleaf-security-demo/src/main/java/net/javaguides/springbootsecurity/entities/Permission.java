@@ -25,6 +25,9 @@ public class Permission
 	@Column(nullable=false, unique=true)
 	@NotEmpty
 	private String code;
+	
+	@Column(nullable=false)
+	private String url;
 		
 	@ManyToMany(mappedBy="permissions")
 	private List<Role> roles;
