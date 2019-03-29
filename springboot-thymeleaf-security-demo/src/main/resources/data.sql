@@ -6,6 +6,7 @@ create table if not exists persistent_logins (
   last_used timestamp not null
 );
 
+delete from  messages;
 delete from  role_permission;
 delete from  user_role;
 delete from  roles;
